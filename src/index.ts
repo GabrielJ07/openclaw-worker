@@ -71,8 +71,9 @@ function validateRequiredEnv(env: OpenClawEnv): string[] {
   const missing: string[] = [];
   const isTestMode = env.DEV_MODE === 'true' || env.E2E_TEST_MODE === 'true';
 
-  if (!env.OPENCLAW_GATEWAY_TOKEN) {
-    missing.push('OPENCLAW_GATEWAY_TOKEN');
+  const token = env.OPENCLAW_GATEWAY_TOKEN || env.MOLTBOT_GATEWAY_TOKEN;
+  if (!token) {
+    missing.push('OPENCLAW_GATEWAY_TOKEN (or MOLTBOT_GATEWAY_TOKEN)');
   }
 
   // CF Access vars not required in dev/test mode since auth is skipped
@@ -318,10 +319,10 @@ app.all('*', async (c) => {
     // Inject gateway token into WebSocket request if not already present.
     // CF Access redirects strip query params, so authenticated users lose ?token=.
     // Since the user already passed CF Access auth, we inject the token server-side.
-    let wsRequest = request;
-    if (c.env.OPENCLAW_GATEWAY_TOKEN && !url.searchParams.has('token')) {
+    const token = c.env.OPENCLAW_GATEWAY_TOKEN || c.env.MOLTBOT_GATEWAY_TOKEN;
+    if (token && !url.searchParams.has('token')) {
       const tokenUrl = new URL(url.toString());
-      tokenUrl.searchParams.set('token', c.env.OPENCLAW_GATEWAY_TOKEN);
+      tokenUrl.searchParams.set('token', token);
       wsRequest = new Request(tokenUrl.toString(), request);
     }
 

@@ -99,10 +99,12 @@ describe('buildEnvVars', () => {
   });
 
   // Gateway token mapping
-  it('passes OPENCLAW_GATEWAY_TOKEN to container', () => {
-    const env = createMockEnv({ OPENCLAW_GATEWAY_TOKEN: 'my-token' });
-    const result = buildEnvVars(env);
-    expect(result.OPENCLAW_GATEWAY_TOKEN).toBe('my-token');
+  it('supports either OPENCLAW_GATEWAY_TOKEN or MOLTBOT_GATEWAY_TOKEN', () => {
+    const envNew = createMockEnv({ OPENCLAW_GATEWAY_TOKEN: 'new-token' });
+    expect(buildEnvVars(envNew).OPENCLAW_GATEWAY_TOKEN).toBe('new-token');
+
+    const envLegacy = createMockEnv({ MOLTBOT_GATEWAY_TOKEN: 'old-token' });
+    expect(buildEnvVars(envLegacy).OPENCLAW_GATEWAY_TOKEN).toBe('old-token');
   });
 
   // Channel tokens

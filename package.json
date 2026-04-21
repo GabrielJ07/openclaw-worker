@@ -56,7 +56,7 @@
         "description": "Your [Anthropic API key](https://console.anthropic.com/)."
       },
       "OPENCLAW_GATEWAY_TOKEN": {
-        "description": "Token for gateway access. Generate with: openssl rand -hex 32"
+        "description": "Token for gateway access (or MOLTBOT_GATEWAY_TOKEN for compatibility)."
       }
     }
   }

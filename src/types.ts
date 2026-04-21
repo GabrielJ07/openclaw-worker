@@ -20,7 +20,8 @@ export interface OpenClawEnv {
   ANTHROPIC_BASE_URL?: string;
   OPENAI_API_KEY?: string;
   GEMINI_API_KEY?: string;
-  OPENCLAW_GATEWAY_TOKEN?: string; // Gateway token (protects access to openclaw gateway)
+  OPENCLAW_GATEWAY_TOKEN?: string; 
+  MOLTBOT_GATEWAY_TOKEN?: string; // Support for legacy secret name
   DEV_MODE?: string; // Set to 'true' for local dev (skips CF Access auth + openclaw device pairing)
   E2E_TEST_MODE?: string; // Set to 'true' for E2E tests (skips CF Access auth but keeps device pairing)
   DEBUG_ROUTES?: string; // Set to 'true' to enable /debug/* routes
