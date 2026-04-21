@@ -1,5 +1,14 @@
 # OpenClaw Worker
 
+Independent, sanitized OpenClaw runner on Cloudflare Workers with Gemini 3.1 Flash support.
+
+## 🚀 Automated Deployment (No Docker Needed)
+
+This project is set up with **GitHub Actions**. You don't need Docker installed on your computer.
+
+1. **Set up Secrets**: Go to your GitHub repo settings and add a secret named `CLOUDFLARE_API_TOKEN` with your Cloudflare API token.
+2. **Push to Main**: Every time you push to the `main` branch, GitHub will automatically build your container and deploy it to your Cloudflare account.
+
 Run [OpenClaw](https://openclaw.ai) (personal AI assistant) in a [Cloudflare Sandbox](https://developers.cloudflare.com/sandbox/).
 
 ![OpenClaw Worker architecture](./assets/logo.png)
