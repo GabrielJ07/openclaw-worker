@@ -3,10 +3,14 @@ import { buildEnvVars } from './env';
 import { createMockEnv } from '../test-utils';
 
 describe('buildEnvVars', () => {
-  it('returns empty object when no env vars set', () => {
+  it('returns only defaults when no env vars set', () => {
     const env = createMockEnv();
     const result = buildEnvVars(env);
-    expect(result).toEqual({});
+    expect(result).toEqual({
+      OPENCLAW_TELEMETRY: 'disabled',
+      OPENCLAW_UPDATE_CHECK: 'false',
+      CHECKPOINT_DISABLE: 'true',
+    });
   });
 
   it('includes ANTHROPIC_API_KEY when set directly', () => {
@@ -95,8 +99,8 @@ describe('buildEnvVars', () => {
   });
 
   // Gateway token mapping
-  it('maps MOLTBOT_GATEWAY_TOKEN to OPENCLAW_GATEWAY_TOKEN for container', () => {
-    const env = createMockEnv({ MOLTBOT_GATEWAY_TOKEN: 'my-token' });
+  it('passes OPENCLAW_GATEWAY_TOKEN to container', () => {
+    const env = createMockEnv({ OPENCLAW_GATEWAY_TOKEN: 'my-token' });
     const result = buildEnvVars(env);
     expect(result.OPENCLAW_GATEWAY_TOKEN).toBe('my-token');
   });
@@ -138,18 +142,24 @@ describe('buildEnvVars', () => {
     expect(result.CF_AI_GATEWAY_MODEL).toBe('workers-ai/@cf/meta/llama-3.3-70b-instruct-fp8-fast');
   });
 
+  it('severs upstream telemetry and update checks', () => {
+    const env = createMockEnv({});
+    const result = buildEnvVars(env);
+    expect(result.OPENCLAW_TELEMETRY).toBe('disabled');
+    expect(result.OPENCLAW_UPDATE_CHECK).toBe('false');
+    expect(result.CHECKPOINT_DISABLE).toBe('true');
+  });
+
   it('combines all env vars correctly', () => {
     const env = createMockEnv({
-      ANTHROPIC_API_KEY: 'sk-key',
-      MOLTBOT_GATEWAY_TOKEN: 'token',
-      TELEGRAM_BOT_TOKEN: 'tg',
-    });
-    const result = buildEnvVars(env);
-
-    expect(result).toEqual({
       ANTHROPIC_API_KEY: 'sk-key',
       OPENCLAW_GATEWAY_TOKEN: 'token',
       TELEGRAM_BOT_TOKEN: 'tg',
     });
+    const result = buildEnvVars(env);
+ 
+    expect(result.ANTHROPIC_API_KEY).toBe('sk-key');
+    expect(result.OPENCLAW_GATEWAY_TOKEN).toBe('token');
+    expect(result.TELEGRAM_BOT_TOKEN).toBe('tg');
   });
 });

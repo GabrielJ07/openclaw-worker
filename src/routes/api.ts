@@ -33,7 +33,7 @@ adminApi.get('/devices', async (c) => {
 
     // Run OpenClaw CLI to list devices
     // Must specify --url and --token (OpenClaw v2026.2.3 requires explicit credentials with --url)
-    const token = c.env.MOLTBOT_GATEWAY_TOKEN;
+    const token = c.env.OPENCLAW_GATEWAY_TOKEN;
     const tokenArg = token ? ` --token ${token}` : '';
     const proc = await sandbox.startProcess(
       `openclaw devices list --json --url ws://localhost:18789${tokenArg}`,
@@ -89,7 +89,7 @@ adminApi.post('/devices/:requestId/approve', async (c) => {
     await ensureGateway(sandbox, c.env);
 
     // Run OpenClaw CLI to approve the device
-    const token = c.env.MOLTBOT_GATEWAY_TOKEN;
+    const token = c.env.OPENCLAW_GATEWAY_TOKEN;
     const tokenArg = token ? ` --token ${token}` : '';
     const proc = await sandbox.startProcess(
       `openclaw devices approve ${requestId} --url ws://localhost:18789${tokenArg}`,
@@ -135,7 +135,7 @@ adminApi.post('/devices/approve-all', async (c) => {
         }
       }
     }
-    const token = c.env.MOLTBOT_GATEWAY_TOKEN;
+    const token = c.env.OPENCLAW_GATEWAY_TOKEN;
     const tokenArg = token ? ` --token ${token}` : '';
     const listProc = await sandbox.startProcess(
       `openclaw devices list --json --url ws://localhost:18789${tokenArg}`,
